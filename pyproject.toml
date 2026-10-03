@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdnctl"
+version = "0.1.0"
+description = "SDN controller for NPU, L1 and L2 networks (simple version, v1)"
+requires-python = ">=3.11"
+dependencies = ["numpy"]  # the Routing Engine only (SPEC 2)
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy", "networkx"]
+
+[project.scripts]
+sdnctl-sim = "sdnctl.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sdnctl = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["reference", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src", "tests"]
+exclude = ["^reference/", "^build/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

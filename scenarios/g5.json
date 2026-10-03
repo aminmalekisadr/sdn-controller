@@ -1,0 +1,6 @@
+{ "name": "G5", "topology": "topology2", "spare_modules_per_domain": 0,
+  "features": { "two_plus_two": true, "ocs": true },
+  "timing_profile": "typical",
+  "events": [
+    { "t_ms": 0, "event": "module_fail", "modules": ["npu-0.m0"] }
+  ] }
