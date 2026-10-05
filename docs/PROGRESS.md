@@ -102,4 +102,14 @@ bash scripts/check.sh                                            # ruff, mypy, p
 
 All phases of SPEC 10 are done. v1 is committed and tagged `v1` in git.
 
-The answers of 2026-10-02 (`docs/DECISIONS.md`, "Answers received") change the model for v2: no lanes, 4-port NPU domains, and a new SURE pairing. v2 starts once its open questions are answered. Items 1, 2, 3, 7, 8 and 9 are still open.
+The answers of 2026-10-02 (`docs/DECISIONS.md`, "Answers received") change the model for v2: no lanes, 4-port NPU domains, and a new SURE pairing. v2 starts once these questions are answered:
+
+1. **Golden numbers:** v2 removes the lane counts and lane lists in `golden.json`. It also changes topology 2's port counts, OCS ports and, with the new pairing, its hop counts and route entries. `golden.json` can't be edited here. Will the user update `ref_model.py` and `golden.json` for v2, or should the v2 values be worked out from the rules for the user to review?
+2. **What the OCS restores under 2+2:** the reading of "replace completely" is that the spare module takes over every connection of the failed module, so every port is back to 400G, as in v1. Or should the OCS move the whole link to a different NPU or switch?
+3. **Half-ports:** under 2+2, the OCS moves half of each port, so something smaller than a port still has to exist. Proposal: keep it hidden inside the model. Messages, groups, capacity and reports would talk only about ports (400G, or 200G when half-served) and 800G links, with groups weighted by port rate. Is that acceptable?
+4. **Which links are 800G:** only the SURE NPU–NPU links, or every link? Today each script edge is one 400G port at each end. Making every link 800G doubles every port count, and an L1 domain's 4 ports would reach 2 L2 switches instead of 4.
+5. **Where the NPU's extra optical ports come from:** the script frees 2 ports for optics by dropping the plane `d % 4`. Do NPUs get 2 more ports, or drop a second plane?
+6. **SURE pairing:** the reading is board b ↔ board b + 8, with NPU i ↔ NPU i. That makes `npu-1` ↔ `npu-65` (`npu-72` in v1), with boards 0–7 on the OCS North side. Is that right?
+7. **Item 9:** add a 10 ms `hello_interval` setting to the config? See "Answers received" for what it changes.
+
+Section 3.6 items 1, 2, 3, 7 and 8 still have no answer.
